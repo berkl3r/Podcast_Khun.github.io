@@ -593,8 +593,9 @@
 
     // Handle missing image
     document.getElementById('mendeleyImage').onerror = function() {
-      this.src = 'https://images.unsplash.com/photo-1456513080510-7bf3a84b82f8?auto=format&fit=crop&q=80&w=1000';
-      this.parentElement.style.border = '2px dashed rgba(255,255,255,0.2)';
+      // Hemos quitado el respaldo automático para que puedas ver si tu imagen cargó correctamente
+      this.style.display = 'none'; // Oculta la imagen si falla
+      this.parentElement.innerHTML = '<div style="display:flex; align-items:center; justify-content:center; height:100%; color:rgba(255,255,255,0.3); border:2px dashed rgba(255,255,255,0.1); border-radius:20px;">⚠️ No se encontró "mendeley_screenshot.png"</div>';
     };
 
     // Initial state
@@ -602,3 +603,4 @@
   </script>
 </body>
 </html>
+

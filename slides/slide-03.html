@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<title>Diapositiva 3 — Fundamentación: Análisis Temático Reflexivo</title>
+<style>
+  :root {
+    --bg: #f5ecd9;
+    --ink: #1f2530;
+    --ink-soft: #2b3340;
+    --blue: #003a5d;
+    --red: #c2502e;
+    --yellow: #e8b73a;
+    --line: #b8a988;
+  }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; }
+  body {
+    font-family: "Segoe UI", "Helvetica Neue", Arial, sans-serif;
+    background: var(--bg);
+    color: var(--ink);
+  }
+  .slide {
+    position: relative;
+    width: 100%;
+    max-width: 1280px;
+    margin: 0 auto;
+    padding: 40px 56px 50px 56px;
+    overflow: hidden;
+    min-height: 560px;
+  }
+
+  /* Marco decorativo con esquinas tipo bracket */
+  .frame {
+    position: absolute;
+    inset: 22px;
+    border: 1px solid transparent;
+    pointer-events: none;
+  }
+  .frame::before, .frame::after,
+  .frame > .bl, .frame > .br {
+    content: "";
+    position: absolute;
+    width: 60px;
+    height: 60px;
+    border: 2px solid var(--red);
+  }
+  .frame::before { top: 0; left: 0; border-right: none; border-bottom: none; }
+  .frame::after  { top: 0; right: 0; border-left: none; border-bottom: none; }
+  .frame > .bl   { bottom: 0; left: 0; border-right: none; border-top: none; }
+  .frame > .br   { bottom: 0; right: 0; border-left: none; border-top: none; }
+
+  h1.title {
+    font-size: 36px;
+    font-weight: 800;
+    margin: 0 0 22px 0;
+    color: var(--ink);
+  }
+
+  .grid {
+    display: grid;
+    grid-template-columns: 1fr 320px 1fr;
+    gap: 24px;
+    align-items: center;
+    min-height: 360px;
+  }
+
+  .col h3 {
+    margin: 0 0 10px 0;
+    font-size: 19px;
+    font-weight: 700;
+  }
+  .col p {
+    margin: 0 0 10px 0;
+    font-size: 14px;
+    line-height: 1.5;
+    color: var(--ink-soft);
+  }
+
+  /* Líneas conectoras */
+  .conn {
+    position: relative;
+    height: 14px;
+    margin: 8px 0;
+  }
+  .conn.left  { text-align: right; }
+  .conn.right { text-align: left; }
+  .conn svg { width: 130px; height: 14px; }
+  .conn.left svg  { transform: scaleX(-1); }
+
+  .col.left  .conn.left  { display: flex; justify-content: flex-end; }
+  .col.right .conn.right { display: flex; justify-content: flex-start; }
+
+  .sphere-wrap {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  .sphere-wrap svg { width: 320px; height: 320px; }
+
+  /* Esfera: capa amarilla interior + wireframe exterior con un sector "abierto" */
+  .yellow-fill {
+    fill: var(--yellow);
+    opacity: 0.85;
+  }
+</style>
+</head>
+<body>
+  <section class="slide">
+
+    <div class="frame">
+      <span class="bl"></span><span class="br"></span>
+    </div>
+
+    <h1 class="title">Fundamentación: Análisis Temático Reflexivo</h1>
+
+    <div class="grid">
+
+      <!-- Columna izquierda -->
+      <div class="col left">
+        <h3>Rol de ATLAS.ti Web<br>(El Soporte)</h3>
+        <div class="conn left">
+          <svg viewBox="0 0 130 14" xmlns="http://www.w3.org/2000/svg">
+            <line x1="0" y1="7" x2="125" y2="7" stroke="#1f2530" stroke-width="1" />
+            <circle cx="125" cy="7" r="3" fill="#1f2530" />
+          </svg>
+        </div>
+        <p><strong>Trazabilidad y Organización:</strong> Centraliza documentos, facilita recuperación de citas, organiza códigos y conserva memos.</p>
+        <p><strong>Límite:</strong> El software apoya la gestión, pero no determina qué significa una cita.</p>
+      </div>
+
+      <!-- Esfera central -->
+      <div class="sphere-wrap">
+        <svg viewBox="-180 -180 360 360" xmlns="http://www.w3.org/2000/svg">
+          <!-- Relleno amarillo interior (sector circular recortado) -->
+          <g class="yellow-fill">
+            <!-- Esfera interior completa amarilla -->
+            <circle cx="0" cy="0" r="95" />
+          </g>
+          <!-- Wireframe exterior (meridianos y paralelos) -->
+          <g stroke="#003a5d" stroke-width="1.1" fill="none">
+            <!-- Ecuador -->
+            <ellipse cx="0" cy="0" rx="140" ry="140" />
+            <!-- Paralelos -->
+            <ellipse cx="0" cy="0" rx="138" ry="100" />
+            <ellipse cx="0" cy="0" rx="125" ry="55"  />
+            <ellipse cx="0" cy="0" rx="100" ry="20"  />
+            <ellipse cx="0" cy="0" rx="138" ry="-100" />
+            <ellipse cx="0" cy="0" rx="125" ry="-55" />
+            <!-- Meridianos -->
+            <ellipse cx="0" cy="0" rx="0"    ry="140" />
+            <ellipse cx="0" cy="0" rx="55"   ry="140" />
+            <ellipse cx="0" cy="0" rx="100"  ry="140" />
+            <ellipse cx="0" cy="0" rx="125"  ry="140" />
+          </g>
+          <!-- "Sector abierto" en la esfera exterior (línea punteada) -->
+          <g stroke="#003a5d" stroke-width="1.1" fill="none" stroke-dasharray="3 4">
+            <path d="M 0,-140 A 140,140 0 0 1 100,99" />
+          </g>
+          <!-- Línea de "corte" donde se separa el casquete -->
+          <line x1="0" y1="-140" x2="100" y2="99" stroke="#003a5d" stroke-width="1.1" />
+          <!-- Núcleo amarillo con borde -->
+          <circle cx="0" cy="0" r="95" fill="#e8b73a" fill-opacity="0.85" stroke="#003a5d" stroke-width="1.1" />
+        </svg>
+      </div>
+
+      <!-- Columna derecha -->
+      <div class="col right">
+        <div class="conn right">
+          <svg viewBox="0 0 130 14" xmlns="http://www.w3.org/2000/svg">
+            <line x1="0" y1="7" x2="125" y2="7" stroke="#1f2530" stroke-width="1" />
+            <circle cx="0" cy="7" r="3" fill="#1f2530" />
+          </svg>
+        </div>
+        <h3>Rol del Investigador<br>(La Esencia)</h3>
+        <p><strong>Reflexividad</strong> (Braun &amp; Clarke, 2006): Los temas no 'aparecen' mecánicamente; son construcciones interpretativas.</p>
+        <p><strong>Rigurosidad:</strong> El investigador segmenta, compara y reconstruye significados basándose en el contraste empírico y el marco conceptual.</p>
+      </div>
+
+    </div>
+
+  </section>
+</body>
+</html>

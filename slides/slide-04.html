@@ -1,0 +1,345 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<title>Diapositiva 4 — ATLAS.ti Web: Entorno de Análisis en la Nube</title>
+<style>
+  :root {
+    --bg: #f5ecd9;
+    --ink: #1f2530;
+    --ink-soft: #2b3340;
+    --blue: #003a5d;
+    --red: #c2502e;
+    --yellow: #e8b73a;
+    --orange: #d8836a;
+    --line: #b8a988;
+  }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; }
+  body {
+    font-family: "Segoe UI", "Helvetica Neue", Arial, sans-serif;
+    background: var(--bg);
+    color: var(--ink);
+  }
+  .slide {
+    position: relative;
+    width: 100%;
+    max-width: 1280px;
+    margin: 0 auto;
+    padding: 40px 56px 50px 56px;
+    overflow: hidden;
+    min-height: 560px;
+  }
+
+  /* Decoraciones */
+  .deco { position: absolute; width: 260px; height: 260px; }
+  .deco.tr { top: 0; right: 0; }
+  .deco.bl { bottom: 0; left: 0; }
+  .deco svg { width: 100%; height: 100%; }
+  .dots {
+    position: absolute;
+    width: 200px;
+    height: 80px;
+    background-image: radial-gradient(circle, #c9b893 1.4px, transparent 1.6px);
+    background-size: 13px 13px;
+    opacity: 0.6;
+  }
+  .dots.tr { top: 90px; right: 60px; }
+  .dots.bl { bottom: 80px; left: 50px; }
+
+  h1.title {
+    font-size: 36px;
+    font-weight: 800;
+    margin: 0 0 22px 0;
+    color: var(--ink);
+  }
+
+  .layout {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1.2fr 1fr 1fr;
+    gap: 18px;
+    align-items: center;
+    min-height: 360px;
+  }
+
+  /* Columnas izquierda */
+  .col {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+  }
+  .col.left  { align-items: flex-end; text-align: right; }
+  .col.right { align-items: flex-start; text-align: left; }
+  .col h3 {
+    margin: 0;
+    font-size: 16px;
+    font-weight: 700;
+    color: var(--ink);
+  }
+  .col p {
+    margin: 0;
+    font-size: 12px;
+    line-height: 1.5;
+    color: var(--ink-soft);
+    max-width: 220px;
+  }
+
+  /* Conector (línea + bola) */
+  .conn {
+    height: 14px;
+    width: 130px;
+    margin: 6px 0;
+  }
+  .conn svg { width: 100%; height: 100%; }
+  .col.left  .conn { align-self: flex-end; }
+  .col.right .conn { align-self: flex-start; transform: scaleX(-1); }
+
+  /* Mockup UI central */
+  .ui {
+    width: 100%;
+    max-width: 420px;
+    background: #ffffff;
+    border: 1px solid #ccd5dd;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 8px 24px rgba(20,30,50,0.12);
+  }
+  .ui-bar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 8px 12px;
+    background: #eef2f6;
+    border-bottom: 1px solid #dde3ea;
+  }
+  .ui-bar .dots-row { display: flex; gap: 4px; }
+  .ui-bar .dots-row i {
+    display: inline-block;
+    width: 8px; height: 8px;
+    border-radius: 50%;
+    background: #b8c2cd;
+  }
+  .ui-bar .avatars { display: flex; gap: 3px; }
+  .ui-bar .avatars i {
+    display: inline-block;
+    width: 16px; height: 16px;
+    border-radius: 50%;
+    background: #cdb486;
+    border: 1px solid #fff;
+  }
+  .ui-bar .avatars i:nth-child(2) { background: #c2502e; }
+  .ui-bar .avatars i:nth-child(3) { background: #003a5d; }
+
+  .ui-body {
+    display: grid;
+    grid-template-columns: 70px 1fr 80px;
+    min-height: 220px;
+  }
+  .ui-side {
+    background: #f4f6f8;
+    border-right: 1px solid #e3e7ec;
+    padding: 10px 8px;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+  .ui-side .row {
+    height: 8px;
+    border-radius: 3px;
+    background: #d8dee4;
+  }
+  .ui-side .row.active { background: #c8a877; }
+
+  .ui-doc {
+    padding: 14px 12px;
+    position: relative;
+  }
+  .ui-doc .line {
+    height: 5px;
+    background: #d6dce3;
+    border-radius: 2px;
+    margin-bottom: 6px;
+  }
+  .ui-doc .line.short { width: 60%; }
+  .ui-doc .line.hl   { background: #e8b73a; height: 6px; }
+  .ui-doc .marker {
+    position: absolute;
+    width: 8px; height: 8px;
+    border-radius: 50%;
+    background: #c2502e;
+  }
+
+  .ui-right {
+    background: #f4f6f8;
+    border-left: 1px solid #e3e7ec;
+    padding: 10px 8px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+  .ui-right .chip {
+    border: 1px solid #d8dee4;
+    border-radius: 4px;
+    padding: 6px 6px;
+    font-size: 9px;
+    color: #5a6772;
+    background: #fff;
+    text-align: left;
+  }
+  .ui-right .chip .head {
+    display: flex; align-items: center; gap: 4px;
+    font-weight: 700; color: #1f2530; font-size: 10px;
+    margin-bottom: 4px;
+  }
+  .ui-right .chip .head i {
+    display:inline-block; width:8px; height:8px;
+    border-radius: 50%;
+    background: #003a5d;
+  }
+  .ui-right .chip .body {
+    height: 3px; background: #e3e7ec; border-radius:2px; margin-bottom: 3px;
+  }
+</style>
+</head>
+<body>
+  <section class="slide">
+
+    <!-- Decoraciones -->
+    <div class="deco tr">
+      <svg viewBox="0 0 260 260" xmlns="http://www.w3.org/2000/svg">
+        <g fill="none" stroke="#b8a988" stroke-width="1">
+          <path d="M260 0 L260 110 L150 0 Z" />
+          <path d="M260 60 L260 170 L90 0 Z" />
+          <path d="M260 0 L260 260" stroke-dasharray="3 4" />
+        </g>
+        <g fill="#c2502e">
+          <circle cx="245" cy="15" r="2" />
+          <circle cx="225" cy="35" r="1.5" />
+          <circle cx="205" cy="55" r="1.2" />
+        </g>
+      </svg>
+    </div>
+    <div class="dots tr"></div>
+
+    <div class="deco bl">
+      <svg viewBox="0 0 260 260" xmlns="http://www.w3.org/2000/svg">
+        <g fill="none" stroke="#b8a988" stroke-width="1">
+          <path d="M0 260 L0 150 L110 260 Z" />
+          <path d="M0 200 L0 90 L170 260 Z" />
+        </g>
+        <g fill="#003a5d">
+          <circle cx="15" cy="245" r="2" />
+          <circle cx="35" cy="225" r="1.5" />
+          <circle cx="55" cy="205" r="1.2" />
+        </g>
+      </svg>
+    </div>
+    <div class="dots bl"></div>
+
+    <h1 class="title">ATLAS.ti Web: Entorno de Análisis en la Nube</h1>
+
+    <div class="layout">
+
+      <!-- Columna 1: Gestión de Documentos -->
+      <div class="col left">
+        <h3>Gestión de<br>Documentos</h3>
+        <div class="conn">
+          <svg viewBox="0 0 130 14" xmlns="http://www.w3.org/2000/svg">
+            <line x1="0" y1="7" x2="125" y2="7" stroke="#1f2530" stroke-width="1" />
+            <circle cx="125" cy="7" r="3" fill="#1f2530" />
+          </svg>
+        </div>
+        <p>Importación de DOCX y PDF. Centraliza el corpus anonimizado y reduce la dispersión de versiones en equipos remotos.</p>
+      </div>
+
+      <!-- Columna 2: Comentarios y Memos -->
+      <div class="col left">
+        <h3>Comentarios y<br>Memos</h3>
+        <div class="conn">
+          <svg viewBox="0 0 130 14" xmlns="http://www.w3.org/2000/svg">
+            <line x1="0" y1="7" x2="125" y2="7" stroke="#1f2530" stroke-width="1" />
+            <circle cx="125" cy="7" r="3" fill="#1f2530" />
+          </svg>
+        </div>
+        <p>Registro de decisiones. Construye la pista de auditoría metodológica (dudas, sesgos y relaciones emergentes).</p>
+      </div>
+
+      <!-- Mockup UI -->
+      <div class="ui">
+        <div class="ui-bar">
+          <div class="dots-row"><i></i><i></i><i></i></div>
+          <div style="font-size:10px;color:#7c8a99;">Atlas.ti Web</div>
+          <div class="avatars"><i></i><i></i><i></i></div>
+        </div>
+        <div class="ui-body">
+          <div class="ui-side">
+            <div class="row"></div>
+            <div class="row"></div>
+            <div class="row active"></div>
+            <div class="row"></div>
+            <div class="row"></div>
+            <div class="row"></div>
+            <div class="row"></div>
+          </div>
+          <div class="ui-doc">
+            <div class="line hl"></div>
+            <div class="line"></div>
+            <div class="line"></div>
+            <div class="line short"></div>
+            <div class="line hl"></div>
+            <div class="line"></div>
+            <div class="line"></div>
+            <div class="line"></div>
+            <div class="line short"></div>
+            <div class="marker" style="top:10px; right:14px;"></div>
+            <div class="marker" style="bottom:30px; left:30px; background:#003a5d;"></div>
+          </div>
+          <div class="ui-right">
+            <div class="chip">
+              <div class="head"><i></i> Tag</div>
+              <div class="body"></div>
+              <div class="body"></div>
+            </div>
+            <div class="chip">
+              <div class="head"><i style="background:#c2502e;"></i> Coding</div>
+              <div class="body"></div>
+              <div class="body"></div>
+            </div>
+            <div class="chip">
+              <div class="head"><i style="background:#e8b73a;"></i> Memo</div>
+              <div class="body"></div>
+              <div class="body"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Columna 4: Codificación -->
+      <div class="col right">
+        <div class="conn">
+          <svg viewBox="0 0 130 14" xmlns="http://www.w3.org/2000/svg">
+            <line x1="0" y1="7" x2="125" y2="7" stroke="#1f2530" stroke-width="1" />
+            <circle cx="0" cy="7" r="3" fill="#1f2530" />
+          </svg>
+        </div>
+        <h3>Codificación<br>Abierta e In Vivo</h3>
+        <p>Selección de fragmentos. Vincula inferencias directamente con evidencia recuperable. Permite agrupar y fusionar códigos.</p>
+      </div>
+
+      <!-- Columna 5: Colaboración -->
+      <div class="col right">
+        <div class="conn">
+          <svg viewBox="0 0 130 14" xmlns="http://www.w3.org/2000/svg">
+            <line x1="0" y1="7" x2="125" y2="7" stroke="#1f2530" stroke-width="1" />
+            <circle cx="0" cy="7" r="3" fill="#1f2530" />
+          </svg>
+        </div>
+        <h3>Colaboración en<br>Tiempo Real</h3>
+        <p>Sincronización simultánea. Revisión cruzada viva y discusión de discrepancias sobre un único proyecto maestro.</p>
+      </div>
+
+    </div>
+
+  </section>
+</body>
+</html>

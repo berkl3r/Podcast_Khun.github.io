@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<title>Diapositiva 1 — El Caso</title>
+<style>
+  :root {
+    --bg: #f5ecd9;
+    --ink: #1f2530;
+    --ink-soft: #2b3340;
+    --blue: #003a5d;
+    --blue-soft: #4a7a9a;
+    --red: #c2502e;
+    --red-soft: #d8836a;
+    --yellow: #e8b73a;
+    --line: #b8a988;
+  }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; }
+  body {
+    font-family: "Segoe UI", "Helvetica Neue", Arial, sans-serif;
+    background: var(--bg);
+    color: var(--ink);
+    width: 100%;
+    min-height: 100vh;
+  }
+  .slide {
+    position: relative;
+    width: 100%;
+    max-width: 1280px;
+    margin: 0 auto;
+    padding: 44px 56px 56px 56px;
+    overflow: hidden;
+    background: var(--bg);
+    min-height: 560px;
+  }
+  /* Decoraciones de esquinas (triángulos finos + puntos) */
+  .deco {
+    position: absolute;
+    width: 260px;
+    height: 260px;
+    opacity: 0.85;
+  }
+  .deco.tr { top: 0; right: 0; }
+  .deco.bl { bottom: 0; left: 0; }
+  .deco svg { width: 100%; height: 100%; }
+
+  /* Patrón de puntos */
+  .dots {
+    position: absolute;
+    width: 220px;
+    height: 90px;
+    background-image: radial-gradient(circle, #c9b893 1.4px, transparent 1.6px);
+    background-size: 14px 14px;
+    opacity: 0.6;
+  }
+  .dots.tr { top: 70px; right: 60px; }
+  .dots.bl { bottom: 90px; left: 60px; }
+
+  h1.title {
+    font-size: 38px;
+    font-weight: 800;
+    margin: 0 0 24px 0;
+    color: var(--ink);
+    letter-spacing: -0.5px;
+  }
+
+  .case-grid {
+    display: grid;
+    grid-template-columns: 1.15fr 0.85fr;
+    gap: 28px;
+    align-items: start;
+  }
+
+  .panel {
+    background: rgba(255,255,255,0.35);
+    border: 1px solid #e3d8be;
+    border-radius: 6px;
+    padding: 16px 20px;
+    position: relative;
+    margin-bottom: 14px;
+  }
+  .panel::before {
+    content: "";
+    position: absolute;
+    left: 0; top: 14px; bottom: 14px;
+    width: 4px;
+    background: var(--blue);
+    border-radius: 0 3px 3px 0;
+  }
+  .panel.red::before { background: var(--red); }
+  .panel.yellow::before { background: var(--yellow); }
+  .panel.navy::before { background: var(--blue); }
+
+  .panel h3 {
+    margin: 0 0 6px 0;
+    font-size: 17px;
+    font-weight: 700;
+    color: var(--ink);
+  }
+  .panel p {
+    margin: 0;
+    font-size: 14px;
+    line-height: 1.5;
+    color: var(--ink-soft);
+  }
+
+  .sub {
+    display: block;
+    font-size: 12.5px;
+    color: var(--blue-soft);
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+    margin-top: 8px;
+    font-weight: 600;
+  }
+
+  .unit-box {
+    margin-top: 6px;
+    padding: 18px 22px;
+    background: var(--blue);
+    color: #f5ecd9;
+    border-radius: 6px;
+  }
+  .unit-box h3 {
+    margin: 0 0 8px 0;
+    font-size: 18px;
+    font-weight: 700;
+    color: #fff;
+  }
+  .unit-box p {
+    margin: 0;
+    font-size: 14.5px;
+    color: #e8eef3;
+    line-height: 1.55;
+  }
+</style>
+</head>
+<body>
+  <section class="slide">
+
+    <!-- Decoración esquina superior derecha -->
+    <div class="deco tr">
+      <svg viewBox="0 0 260 260" xmlns="http://www.w3.org/2000/svg">
+        <g fill="none" stroke="#b8a988" stroke-width="1">
+          <path d="M260 0 L260 110 L150 0 Z" />
+          <path d="M260 60 L260 170 L90 0 Z" />
+          <path d="M260 30 L200 0" />
+        </g>
+        <g fill="#c2502e">
+          <circle cx="245" cy="15" r="2" />
+          <circle cx="225" cy="35" r="1.5" />
+          <circle cx="205" cy="55" r="1.2" />
+        </g>
+      </svg>
+    </div>
+    <div class="dots tr"></div>
+
+    <!-- Decoración esquina inferior izquierda -->
+    <div class="deco bl">
+      <svg viewBox="0 0 260 260" xmlns="http://www.w3.org/2000/svg">
+        <g fill="none" stroke="#b8a988" stroke-width="1">
+          <path d="M0 260 L0 150 L110 260 Z" />
+          <path d="M0 200 L0 90 L170 260 Z" />
+        </g>
+        <g fill="#003a5d">
+          <circle cx="15" cy="245" r="2" />
+          <circle cx="35" cy="225" r="1.5" />
+          <circle cx="55" cy="205" r="1.2" />
+        </g>
+      </svg>
+    </div>
+    <div class="dots bl"></div>
+
+    <h1 class="title">El Caso: Docentes Adultos en Entornos Virtuales</h1>
+
+    <div class="case-grid">
+      <div>
+        <div class="panel navy">
+          <h3>Contexto</h3>
+          <p>Programa de segunda especialidad bajo modalidad e-learning. Participantes con responsabilidades laborales, familiares y académicas concurrentes.</p>
+        </div>
+
+        <div class="panel red">
+          <h3>La Promesa: Autonomía y Flexibilidad</h3>
+          <p>Posibilidad de revisar materiales y autogestión de tiempos.</p>
+        </div>
+
+        <div class="panel yellow">
+          <h3>La Fricción: Barreras Sociotécnicas</h3>
+          <p>Dificultades de conectividad, sobrecarga de actividades, incertidumbre sobre la privacidad de datos.</p>
+        </div>
+      </div>
+
+      <div>
+        <div class="unit-box">
+          <h3>Unidad de Análisis</h3>
+          <p>Los significados expresados por los participantes sobre su experiencia formativa. No busca medir satisfacción, sino comprender cómo construyen sentido.</p>
+        </div>
+      </div>
+    </div>
+
+  </section>
+</body>
+</html>

@@ -1,606 +1,226 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Mendeley – Gestión Inteligente de Referencias</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
-  <style>
-    :root {
-      --primary: #0077b6;
-      --secondary: #00b4d8;
-      --accent: #caf0f8;
-      --bg: #0a192f;
-      --card-bg: rgba(255, 255, 255, 0.05);
-      --text-main: #e6f1ff;
-      --text-dim: #8892b0;
-      --gradient: linear-gradient(135deg, #0077b6 0%, #00b4d8 100%);
-    }
-
-    * { box-sizing: border-box; margin: 0; padding: 0; }
-
-    body {
-      font-family: 'Inter', sans-serif;
-      background: var(--bg);
-      background-image: 
-        radial-gradient(circle at 20% 20%, rgba(0, 119, 182, 0.15) 0%, transparent 40%),
-        radial-gradient(circle at 80% 80%, rgba(0, 180, 216, 0.1) 0%, transparent 40%);
-      color: var(--text-main);
-      height: 100vh;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      overflow: hidden;
-    }
-
-    /* ── Progress bar ── */
-    .progress-container {
-      width: 90%;
-      max-width: 900px;
-      height: 6px;
-      background: rgba(255, 255, 255, 0.1);
-      border-radius: 10px;
-      margin-bottom: 30px;
-      overflow: hidden;
-    }
-
-    .progress-bar {
-      height: 100%;
-      background: var(--gradient);
-      width: 0%;
-      transition: width 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
-      box-shadow: 0 0 15px rgba(0, 180, 216, 0.5);
-    }
-
-    /* ── Slideshow container ── */
-    .slideshow {
-      position: relative;
-      width: 90%;
-      max-width: 900px;
-      perspective: 1000px;
-    }
-
-    .slide {
-      display: none;
-      background: var(--card-bg);
-      backdrop-filter: blur(10px);
-      border: 1px solid rgba(255, 255, 255, 0.1);
-      border-radius: 24px;
-      padding: 60px;
-      box-shadow: 0 20px 50px rgba(0,0,0,0.4);
-      min-height: 500px;
-      transition: all 0.5s ease;
-      position: relative;
-    }
-
-    .slide.active { 
-      display: flex; 
-      flex-direction: column; 
-      justify-content: center;
-      animation: slideIn 0.6s forwards;
-    }
-
-    @keyframes slideIn {
-      from { opacity: 0; transform: translateY(30px) rotateX(-5deg); }
-      to { opacity: 1; transform: translateY(0) rotateX(0); }
-    }
-
-    /* ── Slide number badge ── */
-    .badge {
-      position: absolute;
-      top: 30px; right: 40px;
-      background: var(--gradient);
-      color: #fff;
-      font-size: 0.8rem;
-      font-weight: 600;
-      padding: 6px 16px;
-      border-radius: 30px;
-      letter-spacing: 1px;
-      box-shadow: 0 4px 15px rgba(0, 119, 182, 0.3);
-    }
-
-    /* ── Typography ── */
-    h1 {
-      font-family: 'Outfit', sans-serif;
-      font-size: 2.8rem;
-      font-weight: 700;
-      color: #fff;
-      margin-bottom: 24px;
-      line-height: 1.1;
-      background: var(--gradient);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-    }
-
-    h2 {
-      font-family: 'Outfit', sans-serif;
-      font-size: 1.6rem;
-      color: var(--secondary);
-      margin: 30px 0 15px;
-      font-weight: 600;
-    }
-
-    p {
-      font-size: 1.15rem;
-      line-height: 1.8;
-      color: var(--text-dim);
-      margin-bottom: 15px;
-    }
-
-    strong {
-      color: var(--secondary);
-      font-weight: 600;
-    }
-
-    .subtitle {
-      font-size: 1.2rem;
-      color: var(--primary);
-      margin-bottom: 30px;
-      font-weight: 500;
-      border-left: 3px solid var(--primary);
-      padding-left: 15px;
-    }
-
-    /* ── Cards for step slides ── */
-    .cards {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-      gap: 24px;
-      margin-top: 30px;
-    }
-
-    .card {
-      background: rgba(255, 255, 255, 0.03);
-      border: 1px solid rgba(255, 255, 255, 0.05);
-      border-radius: 16px;
-      padding: 25px;
-      transition: all 0.3s ease;
-      cursor: default;
-    }
-
-    .card:hover {
-      transform: translateY(-8px);
-      background: rgba(255, 255, 255, 0.07);
-      border-color: var(--secondary);
-      box-shadow: 0 10px 30px rgba(0, 180, 216, 0.1);
-    }
-
-    .card h3 {
-      font-size: 1.1rem;
-      color: #fff;
-      margin-bottom: 12px;
-      display: flex;
-      align-items: center;
-      gap: 10px;
-    }
-
-    .card p { 
-      font-size: 0.95rem; 
-      line-height: 1.6;
-      margin-bottom: 0;
-    }
-
-    /* ── Image slide ── */
-    .img-container {
-      margin-top: 30px;
-      width: 100%;
-      height: 280px;
-      border-radius: 20px;
-      overflow: hidden;
-      border: 1px solid rgba(255, 255, 255, 0.1);
-      box-shadow: 0 10px 30px rgba(0,0,0,0.3);
-      position: relative;
-    }
-
-    .img-container img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-      transition: transform 0.5s ease;
-    }
-
-    .img-container:hover img {
-      transform: scale(1.05);
-    }
-
-    .img-overlay {
-      position: absolute;
-      bottom: 0;
-      left: 0;
-      right: 0;
-      padding: 20px;
-      background: linear-gradient(transparent, rgba(0,0,0,0.8));
-      color: #fff;
-      font-size: 0.9rem;
-    }
-
-    .btn-cta {
-      display: inline-flex;
-      align-items: center;
-      gap: 10px;
-      background: var(--gradient);
-      color: #fff;
-      padding: 14px 28px;
-      border-radius: 12px;
-      text-decoration: none;
-      font-weight: 600;
-      font-size: 1rem;
-      margin-top: 20px;
-      transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-      border: none;
-      cursor: pointer;
-      box-shadow: 0 10px 20px rgba(0, 119, 182, 0.2);
-    }
-
-    .btn-cta:hover {
-      transform: scale(1.05) translateY(-3px);
-      box-shadow: 0 15px 30px rgba(0, 119, 182, 0.4);
-    }
-
-    .btn-cta:active {
-      transform: scale(0.98);
-    }
-
-    .btn-cta i {
-      font-size: 1.2rem;
-    }
-
-    /* ── Podcast Player ── */
-    .podcast-widget {
-      position: fixed;
-      bottom: 30px;
-      right: 30px;
-      background: rgba(255, 255, 255, 0.08);
-      backdrop-filter: blur(15px);
-      border: 1px solid rgba(255, 255, 255, 0.1);
-      padding: 15px 25px;
-      border-radius: 20px;
-      display: flex;
-      align-items: center;
-      gap: 15px;
-      box-shadow: 0 10px 30px rgba(0,0,0,0.5);
-      z-index: 1000;
-      transition: all 0.3s ease;
-    }
-
-    .podcast-widget:hover {
-      background: rgba(255, 255, 255, 0.12);
-      transform: translateY(-5px);
-    }
-
-    .play-btn {
-      width: 45px;
-      height: 45px;
-      background: var(--gradient);
-      border: none;
-      border-radius: 50%;
-      color: white;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      cursor: pointer;
-      transition: all 0.3s ease;
-    }
-
-    .play-btn:hover {
-      transform: scale(1.1);
-      box-shadow: 0 0 15px var(--secondary);
-    }
-
-    .podcast-info {
-      display: flex;
-      flex-direction: column;
-    }
-
-    .podcast-title {
-      font-size: 0.85rem;
-      font-weight: 600;
-      color: #fff;
-    }
-
-    .podcast-subtitle {
-      font-size: 0.75rem;
-      color: var(--text-dim);
-    }
-
-    .audio-progress {
-      width: 100px;
-      height: 4px;
-      background: rgba(255,255,255,0.1);
-      border-radius: 2px;
-      margin-top: 8px;
-      position: relative;
-    }
-
-    .audio-progress-fill {
-      height: 100%;
-      background: var(--secondary);
-      border-radius: 2px;
-      width: 0%;
-    }
-
-    /* ── Navigation ── */
-    .nav {
-      display: flex;
-      align-items: center;
-      gap: 30px;
-      margin-top: 40px;
-    }
-
-    .nav-btn {
-      background: transparent;
-      color: var(--text-main);
-      border: 1px solid rgba(255, 255, 255, 0.2);
-      padding: 12px 35px;
-      border-radius: 50px;
-      font-size: 1rem;
-      font-weight: 500;
-      cursor: pointer;
-      transition: all 0.3s ease;
-      display: flex;
-      align-items: center;
-      gap: 10px;
-    }
-
-    .nav-btn:hover:not(:disabled) {
-      background: var(--gradient);
-      border-color: transparent;
-      box-shadow: 0 5px 20px rgba(0, 180, 216, 0.4);
-      transform: translateY(-2px);
-    }
-
-    .nav-btn:disabled {
-      opacity: 0.3;
-      cursor: not-allowed;
-    }
-
-    .dots {
-      display: flex;
-      gap: 12px;
-    }
-
-    .dot {
-      width: 12px; height: 12px;
-      border-radius: 50%;
-      background: rgba(255, 255, 255, 0.2);
-      cursor: pointer;
-      transition: all 0.3s ease;
-    }
-
-    .dot.active { 
-      background: var(--secondary); 
-      transform: scale(1.4); 
-      box-shadow: 0 0 10px var(--secondary);
-    }
-
-    .hint {
-      margin-top: 20px;
-      font-size: 0.85rem;
-      color: var(--text-dim);
-      opacity: 0.6;
-    }
-
-    /* ── Responsive ── */
-    @media (max-width: 768px) {
-      .slide { padding: 40px 30px; min-height: 450px; }
-      h1 { font-size: 2rem; }
-      .cards { grid-template-columns: 1fr; }
-    }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Podcast: Docentes Adultos en Entornos Virtuales - UCV</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        :root {
+            --ucv-blue: #003366;
+            --ucv-red: #cc0000;
+            --cream: #f5ecd9;
+            --light-bg: #f4f7f6;
+        }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--light-bg);
+            margin: 0;
+            color: #333;
+        }
+        header {
+            background: var(--ucv-blue);
+            color: white;
+            padding: 2rem;
+            text-align: center;
+            border-bottom: 5px solid var(--ucv-red);
+        }
+        .container {
+            max-width: 1100px;
+            margin: 20px auto;
+            padding: 20px;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+        .section {
+            margin-bottom: 30px;
+            padding: 20px;
+            border-left: 5px solid var(--ucv-blue);
+            background: #fafafa;
+        }
+        /* Mini-player flotante */
+        .mini-player {
+            position: fixed;
+            right: 20px;
+            bottom: 20px;
+            width: 320px;
+            background: #ffffff;
+            border: 1px solid #d8dee4;
+            border-radius: 14px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.18);
+            padding: 10px 14px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            z-index: 1000;
+            transition: transform 0.2s ease;
+        }
+        .mini-player:hover { transform: translateY(-2px); }
+        .mini-player .icon {
+            flex: 0 0 36px;
+            width: 36px; height: 36px;
+            border-radius: 50%;
+            background: var(--ucv-red);
+            color: #fff;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 16px;
+        }
+        .mini-player audio {
+            flex: 1;
+            height: 32px;
+            min-width: 0;
+        }
+        .mini-player .close {
+            background: none; border: 0; cursor: pointer;
+            color: #888; font-size: 14px; padding: 4px 6px;
+        }
+        .mini-player .close:hover { color: #333; }
+        /* Slides viewer ocupa el ancho completo */
+        .slides-viewer {
+            display: flex;
+            overflow-x: auto;
+            gap: 20px;
+            padding: 14px;
+            scroll-snap-type: x mandatory;
+            scroll-behavior: smooth;
+            background: #f0eee8;
+            border-radius: 10px;
+        }
+        .slide-frame {
+            min-width: 100%;
+            scroll-snap-align: start;
+            background: var(--cream);
+            border-radius: 8px;
+            overflow: hidden;
+            border: 1px solid #e3d8be;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.06);
+        }
+        .slide-frame iframe {
+            width: 100%;
+            border: 0;
+            display: block;
+            height: 620px;
+        }
+        .slide-caption {
+            padding: 10px 14px;
+            background: #fff;
+            border-top: 1px solid #ece3cb;
+            font-size: 0.9rem;
+            color: #555;
+            text-align: center;
+        }
+        .slide-nav {
+            display: flex;
+            gap: 8px;
+            justify-content: center;
+            margin: 14px 0 4px 0;
+        }
+        .slide-nav button {
+            background: var(--ucv-blue);
+            color: white;
+            border: 0;
+            padding: 8px 14px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 0.9rem;
+        }
+        .slide-nav button:hover { background: #00264a; }
+        .btn {
+            display: inline-block;
+            padding: 12px 25px;
+            background: var(--ucv-red);
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+            transition: 0.3s;
+            margin: 5px;
+        }
+        .btn:hover { background: #990000; }
+        footer { text-align: center; padding: 20px; font-size: 0.9rem; color: #666; }
+    </style>
 </head>
 <body>
 
-  <div class="progress-container">
-    <div class="progress-bar" id="progressBar"></div>
-  </div>
+<header>
+    <h1>Podcast: Docentes Adultos en Entornos Virtuales</h1>
+    <p>Análisis Cualitativo con ATLAS.ti Web — Gestión de Contenidos Digitales y del Conocimiento</p>
+</header>
 
-  <div class="slideshow">
+<div class="container">
 
-    <!-- Slide 1: Portada -->
-    <div class="slide active" id="slide-1">
-      <span class="badge">01 / 05</span>
-      <h1>Gestión Inteligente de Referencias</h1>
-      <p class="subtitle">Presentado por Khunji Marilyn Alarcón Jiménez</p>
-      <p>
-        Optimiza tu flujo de trabajo académico con <strong>Mendeley</strong>, la solución integral para organizar, compartir y citar tus investigaciones de manera profesional.
-      </p>
-      <div style="display: flex; gap: 15px; margin-top: 20px;">
-        <button onclick="togglePodcast()" class="btn-cta">
-          <span>🎙️</span> Escuchar Podcast
-        </button>
-      </div>
-      <h2>Objetivo de la Sesión</h2>
-      <p>
-        Dominar las funcionalidades clave de Mendeley para transformar la gestión bibliográfica en un proceso ágil, preciso y automatizado.
-      </p>
+    <div class="section">
+        <h2><i class="fas fa-info-circle"></i> Presentación</h2>
+        <p>Esta experiencia audiovisual acompaña el estudio sobre cómo los <strong>docentes adultos</strong> que cursan una segunda especialidad en modalidad e-learning construyen significados sobre su experiencia formativa, analizados mediante <strong>Análisis Temático Reflexivo</strong> con soporte de <strong>ATLAS.ti Web</strong>.</p>
+        <p style="font-size:0.9rem;color:#777;"><i class="fas fa-headphones"></i> Usa el reproductor flotante (esquina inferior derecha) para escuchar el podcast mientras revisas las diapositivas.</p>
     </div>
 
-    <!-- Slide 2: Definición -->
-    <div class="slide" id="slide-2">
-      <span class="badge">02 / 05</span>
-      <h1>¿Por qué Mendeley?</h1>
-      <p>
-        Más que un simple gestor, Mendeley es un ecosistema <strong>gratuito</strong> diseñado para investigadores. Permite centralizar tu biblioteca, generar citas en segundos y colaborar globalmente.
-      </p>
-      <div class="cards">
-        <div class="card">
-          <h3>🚀 Eficiencia</h3>
-          <p>Ahorra horas de trabajo manual en el formateo de bibliografías.</p>
+    <div class="section">
+        <h2><i class="fas fa-chalkboard-teacher"></i> Guía Visual — Diapositivas</h2>
+        <div class="slides-viewer" id="slidesViewer">
+            <div class="slide-frame">
+                <iframe src="slides/slide-01.html" title="Diapositiva 1 - El Caso" loading="lazy"></iframe>
+                <div class="slide-caption">1 · El Caso: Docentes Adultos en Entornos Virtuales</div>
+            </div>
+            <div class="slide-frame">
+                <iframe src="slides/slide-02.html" title="Diapositiva 2 - Arquitectura del Corpus" loading="lazy"></iframe>
+                <div class="slide-caption">2 · Arquitectura del Corpus Cualitativo</div>
+            </div>
+            <div class="slide-frame">
+                <iframe src="slides/slide-03.html" title="Diapositiva 3 - Fundamentación" loading="lazy"></iframe>
+                <div class="slide-caption">3 · Fundamentación: Análisis Temático Reflexivo</div>
+            </div>
+            <div class="slide-frame">
+                <iframe src="slides/slide-04.html" title="Diapositiva 4 - ATLAS.ti Web" loading="lazy"></iframe>
+                <div class="slide-caption">4 · ATLAS.ti Web: Entorno de Análisis en la Nube</div>
+            </div>
         </div>
-        <div class="card">
-          <h3>☁️ Sincronización</h3>
-          <p>Accede a tus documentos desde cualquier dispositivo y en cualquier lugar.</p>
+        <div class="slide-nav">
+            <button onclick="slideScroll(-1)"><i class="fas fa-arrow-left"></i> Anterior</button>
+            <button onclick="slideScroll(1)">Siguiente <i class="fas fa-arrow-right"></i></button>
         </div>
-      </div>
+        <p style="text-align:center;"><small>← Desliza horizontalmente o usa los botones para navegar →</small></p>
     </div>
 
-    <!-- Slide 3: Guía de Inicio -->
-    <div class="slide" id="slide-3">
-      <span class="badge">03 / 05</span>
-      <h1>Guía de Inicio: Primeros Pasos</h1>
-      <div class="cards">
-        <div class="card">
-          <h3>📥 Instalación</h3>
-          <p>Descarga la versión desktop compatible con Windows, macOS y Linux.</p>
-          <a href="https://www.mendeley.com/download-reference-manager/" target="_blank" class="btn-cta">
-            Descargar Ahora <span>↗</span>
-          </a>
-        </div>
-        <div class="card">
-          <h3>🖥️ La Biblioteca</h3>
-          <p>Explora un entorno intuitivo con secciones dedicadas a tus artículos y favoritos.</p>
-        </div>
-        <div class="card">
-          <h3>📄 Captura de Datos</h3>
-          <p>Utiliza el <strong>Web Importer</strong> para guardar referencias directamente.</p>
-          <a href="https://www.mendeley.com/reference-management/web-importer" target="_blank" class="btn-cta">
-            Ver Web Importer <span>↗</span>
-          </a>
-        </div>
-      </div>
-    </div>
-
-    <!-- Slide 4: Funciones Avanzadas -->
-    <div class="slide" id="slide-4">
-      <span class="badge">04 / 05</span>
-      <h1>Potenciando tu Investigación</h1>
-      <div class="cards">
-        <div class="card">
-          <h3>📁 Organización Estructural</h3>
-          <p>Crea colecciones personalizadas y utiliza <strong>etiquetas inteligentes</strong> para filtrar contenido crítico.</p>
-        </div>
-        <div class="card">
-          <h3>✍️ Integración con Word</h3>
-          <p>Inserta citas bibliográficas en tiempo real. Mendeley adapta el formato (APA, IEEE, Vancouver) al instante.</p>
-        </div>
-        <div class="card">
-          <h3>🤝 Red de Colaboración</h3>
-          <p>Únete a grupos de investigación y comparte documentos con colegas de todo el mundo.</p>
-        </div>
-      </div>
-    </div>
-
-    <div class="slide" id="slide-5">
-      <span class="badge">05 / 05</span>
-      <h1>Mendeley en Acción</h1>
-      <p>Visualiza cómo la herramienta organiza automáticamente los metadatos de tus archivos PDF:</p>
-      <div class="img-container">
-        <img id="mendeleyImage" src="mendeley_screenshot.png" alt="Mendeley Interface">
-        <div class="img-overlay">Interfaz de Mendeley Reference Manager con gestión de colecciones y metadatos.</div>
-      </div>
-      <div style="display: flex; gap: 15px; margin-top: 20px;">
-        <a href="https://www.mendeley.com/search/" target="_blank" class="btn-cta">
-          Explorar Mendeley <span>🔍</span>
+    <div class="section" style="text-align: center;">
+        <h2>Recursos del Estudio</h2>
+        <a href="https://atlasti.com/es/inicio" target="_blank" class="btn">
+            <i class="fas fa-cloud"></i> ATLAS.ti Web
         </a>
-        <button onclick="goTo(1)" class="btn-cta" style="background: rgba(255,255,255,0.1); box-shadow: none;">
-          Volver al Inicio <span>↺</span>
-        </button>
-      </div>
+        <a href="https://www.tandfonline.com/doi/abs/10.1191/1478088706qp063oa" target="_blank" class="btn">
+            <i class="fas fa-book"></i> Braun &amp; Clarke (2006)
+        </a>
     </div>
 
-  </div>
-
-  <div class="nav">
-    <button class="nav-btn" id="prevBtn" onclick="changeSlide(-1)">← Anterior</button>
-    <div class="dots" id="dots"></div>
-    <button class="nav-btn" id="nextBtn" onclick="changeSlide(1)">Siguiente →</button>
-  </div>
-
-  <p class="hint">Navega usando los botones o las flechas del teclado</p>
-
-  <div class="podcast-widget">
-    <button class="play-btn" id="podcastToggle" onclick="togglePodcast()">
-      <span id="playIcon">▶</span>
-    </button>
-    <div class="podcast-info">
-      <div class="podcast-title">Podcast: Mendeley Académico</div>
-      <div class="podcast-subtitle">Escuchar ahora</div>
-      <div class="audio-progress">
-        <div class="audio-progress-fill" id="audioProgress"></div>
-      </div>
+    <div class="section">
+        <h2><i class="fas fa-users-cog"></i> Evidencias de Gestión</h2>
+        <p>Trabajo elaborado con apoyo de herramientas <strong>Google Workspace</strong> para la planificación, almacenamiento y trazabilidad del corpus anonimizado.</p>
     </div>
-    <audio id="podcastAudio" src="podcast.aac"></audio>
-  </div>
 
-  <script>
-    const total = 5;
-    let current = 1;
+</div>
 
-    // Podcast Logic
-    const audio = document.getElementById('podcastAudio');
-    const playIcon = document.getElementById('playIcon');
-    const progressBar = document.getElementById('audioProgress');
-    let isPlaying = false;
+<footer>
+    <p>&copy; 2026 Universidad César Vallejo | Investigación cualitativa en entornos virtuales de aprendizaje</p>
+</footer>
 
-    function togglePodcast() {
-      if (isPlaying) {
-        audio.pause();
-        playIcon.textContent = '▶';
-      } else {
-        audio.play().catch(e => console.log("Audio file not found or browser blocked autoplay"));
-        playIcon.textContent = '⏸';
-      }
-      isPlaying = !isPlaying;
+<!-- Mini-player flotante -->
+<div class="mini-player" id="miniPlayer" aria-label="Reproductor de podcast">
+    <div class="icon"><i class="fas fa-headphones"></i></div>
+    <audio controls preload="metadata" aria-label="Audio del podcast">
+        <source src="podcast.aac" type="audio/aac">
+        Tu navegador no soporta el audio.
+    </audio>
+    <button class="close" onclick="document.getElementById('miniPlayer').style.display='none'" aria-label="Cerrar reproductor">×</button>
+</div>
+
+<script>
+    function slideScroll(dir) {
+        const v = document.getElementById('slidesViewer');
+        const frame = v.querySelector('.slide-frame');
+        if (!frame) return;
+        v.scrollBy({ left: dir * (frame.offsetWidth + 20), behavior: 'smooth' });
     }
+</script>
 
-    audio.ontimeupdate = () => {
-      const percent = (audio.currentTime / audio.duration) * 100;
-      progressBar.style.width = percent + '%';
-    };
-
-    audio.onended = () => {
-      isPlaying = false;
-      playIcon.textContent = '▶';
-      progressBar.style.width = '0%';
-    };
-
-    // Build dots
-    const dotsEl = document.getElementById('dots');
-    for (let i = 1; i <= total; i++) {
-      const d = document.createElement('div');
-      d.className = 'dot' + (i === 1 ? ' active' : '');
-      d.setAttribute('data-index', i);
-      d.onclick = () => goTo(i);
-      dotsEl.appendChild(d);
-    }
-
-    function goTo(n) {
-      document.getElementById('slide-' + current).classList.remove('active');
-      document.querySelectorAll('.dot')[current - 1].classList.remove('active');
-      current = n;
-      document.getElementById('slide-' + current).classList.add('active');
-      document.querySelectorAll('.dot')[current - 1].classList.add('active');
-      
-      document.getElementById('prevBtn').disabled = current === 1;
-      document.getElementById('nextBtn').disabled = current === total;
-      
-      const progress = ((current) / total) * 100;
-      document.getElementById('progressBar').style.width = progress + '%';
-    }
-
-    function changeSlide(dir) {
-      let next = current + dir;
-      if (next >= 1 && next <= total) goTo(next);
-    }
-
-    document.addEventListener('keydown', e => {
-      if (e.key === 'ArrowRight') changeSlide(1);
-      if (e.key === 'ArrowLeft') changeSlide(-1);
-    });
-
-    // Handle missing image
-    document.getElementById('mendeleyImage').onerror = function() {
-      // Hemos quitado el respaldo automático para que puedas ver si tu imagen cargó correctamente
-      this.style.display = 'none'; // Oculta la imagen si falla
-      this.parentElement.innerHTML = '<div style="display:flex; align-items:center; justify-content:center; height:100%; color:rgba(255,255,255,0.3); border:2px dashed rgba(255,255,255,0.1); border-radius:20px;">⚠️ No se encontró "mendeley_screenshot.png"</div>';
-    };
-
-    // Initial state
-    goTo(1);
-  </script>
 </body>
 </html>
-

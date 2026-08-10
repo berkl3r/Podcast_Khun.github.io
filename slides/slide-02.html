@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<title>Diapositiva 2 — Arquitectura del Corpus Cualitativo</title>
+<style>
+  :root {
+    --bg: #f5ecd9;
+    --ink: #1f2530;
+    --ink-soft: #2b3340;
+    --blue: #003a5d;
+    --blue-deep: #002a44;
+    --red: #c2502e;
+    --yellow: #e8b73a;
+    --orange: #d8836a;
+    --line: #b8a988;
+  }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; }
+  body {
+    font-family: "Segoe UI", "Helvetica Neue", Arial, sans-serif;
+    background: var(--bg);
+    color: var(--ink);
+  }
+  .slide {
+    position: relative;
+    width: 100%;
+    max-width: 1280px;
+    margin: 0 auto;
+    padding: 40px 56px 50px 56px;
+    overflow: hidden;
+    min-height: 560px;
+  }
+
+  /* Decoraciones */
+  .deco { position: absolute; width: 260px; height: 260px; }
+  .deco.tr { top: 0; right: 0; }
+  .deco.bl { bottom: 0; left: 0; }
+  .deco svg { width: 100%; height: 100%; }
+  .dots {
+    position: absolute;
+    width: 200px;
+    height: 80px;
+    background-image: radial-gradient(circle, #c9b893 1.4px, transparent 1.6px);
+    background-size: 13px 13px;
+    opacity: 0.6;
+  }
+  .dots.tr { top: 90px; right: 60px; }
+  .dots.bl { bottom: 80px; left: 50px; }
+
+  h1.title {
+    font-size: 38px;
+    font-weight: 800;
+    margin: 0 0 20px 0;
+    color: var(--ink);
+  }
+
+  /* Top: 4 rombos */
+  .diamonds {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 16px;
+    margin-top: 6px;
+  }
+  .diamond {
+    position: relative;
+    padding: 18px 14px 26px 14px;
+    text-align: center;
+    background: rgba(255,255,255,0.25);
+    transform: rotate(0deg);
+    border-top: 4px solid var(--blue);
+    border-bottom: 4px solid var(--blue);
+  }
+  .diamond::before, .diamond::after {
+    content: "";
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 0; height: 0;
+    border-left: calc(50% + 2px) solid transparent;
+    border-right: calc(50% + 2px) solid transparent;
+  }
+  .diamond::before {
+    top: -22px;
+    border-bottom: 22px solid #f5ecd9;
+    border-bottom-color: var(--bg);
+  }
+  .diamond::after {
+    bottom: -22px;
+    border-top: 22px solid #f5ecd9;
+    border-top-color: var(--bg);
+  }
+  .diamond.red    { border-color: var(--red); }
+  .diamond.yellow { border-color: var(--yellow); }
+  .diamond.orange { border-color: var(--orange); }
+  .diamond h3 {
+    margin: 0 0 6px 0;
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--ink);
+    line-height: 1.25;
+  }
+  .diamond p {
+    margin: 0;
+    font-size: 11.5px;
+    line-height: 1.4;
+    color: var(--ink-soft);
+  }
+
+  /* Líneas conectoras (decorativas) */
+  .connectors {
+    position: relative;
+    height: 70px;
+    margin-top: 6px;
+  }
+  .connectors svg {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+  }
+
+  /* Bloque inferior */
+  .bottom {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 36px;
+    align-items: center;
+  }
+  .cube-wrap {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  .cube-wrap svg { width: 180px; height: 180px; }
+
+  .corpus h3 {
+    margin: 0 0 8px 0;
+    font-size: 22px;
+    font-weight: 700;
+  }
+  .corpus p {
+    margin: 0;
+    font-size: 14.5px;
+    line-height: 1.5;
+    color: var(--ink-soft);
+  }
+</style>
+</head>
+<body>
+  <section class="slide">
+
+    <!-- Decoraciones -->
+    <div class="deco tr">
+      <svg viewBox="0 0 260 260" xmlns="http://www.w3.org/2000/svg">
+        <g fill="none" stroke="#b8a988" stroke-width="1">
+          <path d="M260 0 L260 110 L150 0 Z" />
+          <path d="M260 60 L260 170 L90 0 Z" />
+        </g>
+        <g fill="#c2502e">
+          <circle cx="245" cy="15" r="2" />
+          <circle cx="225" cy="35" r="1.5" />
+          <circle cx="205" cy="55" r="1.2" />
+        </g>
+      </svg>
+    </div>
+    <div class="dots tr"></div>
+
+    <div class="deco bl">
+      <svg viewBox="0 0 260 260" xmlns="http://www.w3.org/2000/svg">
+        <g fill="none" stroke="#b8a988" stroke-width="1">
+          <path d="M0 260 L0 150 L110 260 Z" />
+          <path d="M0 200 L0 90 L170 260 Z" />
+        </g>
+        <g fill="#003a5d">
+          <circle cx="15" cy="245" r="2" />
+          <circle cx="35" cy="225" r="1.5" />
+          <circle cx="55" cy="205" r="1.2" />
+        </g>
+      </svg>
+    </div>
+    <div class="dots bl"></div>
+
+    <h1 class="title">Arquitectura del Corpus Cualitativo</h1>
+
+    <div class="diamonds">
+      <div class="diamond blue">
+        <h3>12 Entrevistas Semiestructuradas</h3>
+        <p>Exploración de experiencias individuales y cambios percibidos (75 páginas).</p>
+      </div>
+      <div class="diamond red">
+        <h3>2 Grupos Focales Virtuales</h3>
+        <p>Observación de acuerdos y construcción colectiva de significados (30 páginas).</p>
+      </div>
+      <div class="diamond yellow">
+        <h3>Foro Académico</h3>
+        <p>24 intervenciones que contrastan discursos espontáneos (10 páginas).</p>
+      </div>
+      <div class="diamond orange">
+        <h3>Notas Reflexivas</h3>
+        <p>8 memos de proceso y 4 notas de decisión del equipo investigador.</p>
+      </div>
+    </div>
+
+    <!-- Líneas que bajan de los rombos al cubo -->
+    <div class="connectors">
+      <svg viewBox="0 0 1100 110" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+        <g stroke="#1f2530" stroke-width="0.8" fill="none">
+          <line x1="140"  y1="0" x2="500" y2="100" />
+          <line x1="320"  y1="0" x2="500" y2="100" />
+          <line x1="500"  y1="0" x2="500" y2="100" />
+          <line x1="680"  y1="0" x2="500" y2="100" />
+          <line x1="860"  y1="0" x2="500" y2="100" />
+        </g>
+      </svg>
+    </div>
+
+    <div class="bottom">
+      <div class="cube-wrap">
+        <!-- Cubo isométrico wireframe -->
+        <svg viewBox="-110 -110 220 220" xmlns="http://www.w3.org/2000/svg" width="180" height="180">
+          <g stroke="#1f2530" stroke-width="0.9" fill="none">
+            <!-- Cara superior -->
+            <polygon points="0,-90 78,-45 0,0 -78,-45" />
+            <!-- Cara izquierda -->
+            <polygon points="-78,-45 0,0 0,90 -78,45" />
+            <!-- Cara derecha -->
+            <polygon points="78,-45 0,0 0,90 78,45" />
+            <!-- Líneas de subdivisión (cuadrícula interior sutil) -->
+            <line x1="-39" y1="-22.5" x2="39" y2="22.5" />
+            <line x1="0" y1="0" x2="0" y2="90" />
+            <line x1="39" y1="-67.5" x2="39" y2="22.5" />
+            <line x1="-39" y1="-67.5" x2="-39" y2="22.5" />
+            <line x1="-39" y1="22.5" x2="39" y2="22.5" />
+            <line x1="-39" y1="67.5" x2="39" y2="67.5" />
+          </g>
+        </svg>
+      </div>
+
+      <div class="corpus">
+        <h3>Corpus Cualitativo</h3>
+        <p>Datos textuales listos para la anonimización e importación a la nube.</p>
+      </div>
+    </div>
+
+  </section>
+</body>
+</html>
